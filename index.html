@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VESSALIN · Portal Corporativo</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --rojo:#a4271c;--rojo-osc:#7f1e15;
+  --bg:#f3f4f6;--panel:#fff;--borde:#e5e7eb;
+  --texto:#111827;--texto-suave:#6b7280;--texto-tenue:#9ca3af;
+  --aviso-bg:#fffbeb;--aviso-borde:#fbbf24;--aviso-texto:#78350f;
+  --sombra:0 1px 2px rgba(16,24,40,.04),0 1px 3px rgba(16,24,40,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--texto);font-size:14px;line-height:1.55}
+
+/* header */
+header{background:var(--panel);border-bottom:1px solid var(--borde);position:sticky;top:0;z-index:30}
+.header-inner{max-width:820px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:9px}
+.logo svg{width:26px;height:26px}
+.logo span{font-size:16px;font-weight:800;letter-spacing:.06em}
+.sesion{font-size:11px;color:var(--texto-tenue);text-align:right;line-height:1.5}
+.sesion b{color:var(--texto-suave);font-weight:600}
+
+/* nav tabs */
+nav{background:var(--panel);border-bottom:1px solid var(--borde);position:sticky;top:57px;z-index:29;overflow-x:auto}
+.nav-inner{max-width:820px;margin:0 auto;display:flex;padding:0 20px}
+.tab{
+  padding:13px 16px;font-size:12.5px;font-weight:600;color:var(--texto-tenue);
+  border:none;background:none;cursor:pointer;white-space:nowrap;
+  border-bottom:2.5px solid transparent;font-family:inherit;
+}
+.tab.active{color:var(--rojo);border-bottom-color:var(--rojo)}
+.tab:hover:not(.active){color:var(--texto-suave)}
+
+.wrap{max-width:820px;margin:0 auto;padding:20px 20px 70px}
+.vista{display:none}
+.vista.active{display:block;animation:f .25s ease}
+@keyframes f{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+/* Glitch effect */
+.glitch { animation: parpadeo 3.5s infinite; display: inline-block; }
+.glitch-fast { animation: parpadeo 1.2s infinite; display: inline-block; }
+@keyframes parpadeo {
+  0%, 95%, 98% { opacity: 1; transform: none; filter: none; }
+  96% { opacity: 0.8; transform: translateX(-1px) skewX(5deg); filter: drop-shadow(2px 0px 0px rgba(164,39,28,0.8)); }
+  99% { opacity: 0.5; transform: translateX(1px) skewX(-5deg); filter: drop-shadow(-2px 0px 0px rgba(30,50,150,0.8)); }
+}
+
+.aviso{background:var(--aviso-bg);border:1px solid var(--aviso-borde);border-left:3px solid var(--aviso-borde);border-radius:8px;padding:14px 16px;margin-bottom:20px;font-size:12.5px;color:var(--aviso-texto);line-height:1.7;display:flex;gap:11px}
+.aviso .icono{flex-shrink:0;width:18px;height:18px;margin-top:1px}
+.aviso .t{font-weight:700;font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;color:#92400e}
+
+.card{background:var(--panel);border:1px solid var(--borde);border-radius:10px;padding:22px 24px;margin-bottom:16px;box-shadow:var(--sombra)}
+.card h1{font-size:15px;font-weight:700;margin-bottom:4px}
+.card .desc{font-size:12px;color:var(--texto-tenue);margin-bottom:16px}
+
+/* perfil */
+.perfil-cab{display:flex;gap:16px;align-items:center;margin-bottom:20px}
+.avatar{width:64px;height:64px;border-radius:12px;background:var(--bg);border:1.5px dashed var(--texto-tenue);display:flex;align-items:center;justify-content:center;font-size:24px;color:var(--texto-tenue);flex-shrink:0;font-weight:600}
+.perfil-cab .nombre{font-size:17px;font-weight:600;color:var(--texto-tenue);font-style:italic}
+.perfil-cab .rol{font-size:12.5px;color:var(--texto-suave);margin-top:3px}
+.campos-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border-top:1px solid var(--borde)}
+.campo{padding:12px 0;border-bottom:1px solid var(--borde);display:flex;flex-direction:column;gap:3px}
+.campo:nth-child(odd){padding-right:16px}
+.campo:nth-child(even){padding-left:16px;border-left:1px solid var(--borde)}
+.campo .k{font-size:10.5px;color:var(--texto-tenue);text-transform:uppercase;letter-spacing:.05em;font-weight:600}
+.campo .v{font-size:13.5px;font-weight:600}
+.campo .v.mono{font-family: monospace; font-size: 14.5px; color: var(--rojo);}
+.campo .v.tachado{text-decoration:line-through;color:var(--texto-tenue);font-weight:500}
+.pill{display:inline-block;font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:20px;background:#fee2e2;color:var(--rojo-osc);width:fit-content}
+.pill.gris{background:#f3f4f6;color:var(--texto-suave)}
+.pill.verde{background:#dcfce7;color:#166534}
+
+/* rama acordeon */
+.rama{background:var(--panel);border:1px solid var(--borde);border-radius:10px;margin-bottom:12px;overflow:hidden;box-shadow:var(--sombra)}
+.rama-cab{width:100%;display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:none;border:none;cursor:pointer;font-family:inherit;text-align:left}
+.rama-cab:hover{background:#fafafa}
+.rama-tit{font-size:13px;font-weight:700}
+.rama-sub{font-size:11px;color:var(--texto-tenue);margin-top:2px}
+.rama-count{font-size:10.5px;font-weight:700;color:var(--texto-suave);background:var(--bg);padding:3px 9px;border-radius:20px;margin-right:10px}
+.chevron{width:15px;height:15px;stroke:var(--texto-tenue);transition:transform .2s;flex-shrink:0}
+.rama.open .chevron{transform:rotate(180deg)}
+.rama-body{max-height:0;overflow:hidden;transition:max-height .35s ease}
+.rama.open .rama-body{border-top:1px solid var(--borde)}
+.rama-body-inner{padding:4px 20px 6px}
+
+.sub{border-bottom:1px solid var(--borde)}
+.sub:last-child{border-bottom:none}
+.sub-cab{width:100%;display:flex;align-items:center;justify-content:space-between;padding:12px 0;background:none;border:none;cursor:pointer;font-family:inherit;text-align:left}
+.sub-cab .h{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--rojo);font-weight:700;display:flex;align-items:center;gap:7px}
+.sub-cab .h::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--rojo);flex-shrink:0}
+.mini-chevron{width:12px;height:12px;stroke:var(--texto-tenue);transition:transform .2s;flex-shrink:0}
+.sub.open .mini-chevron{transform:rotate(180deg)}
+.sub-body{max-height:0;overflow:hidden;transition:max-height .3s ease}
+.sub-body-inner{padding:0 0 14px;font-size:12.5px;color:var(--texto-suave);line-height:1.7}
+
+/* historial */
+.historial .item{display:flex;gap:14px;padding:11px 0;border-bottom:1px solid var(--borde);align-items:flex-start}
+.historial .item:last-child{border-bottom:none}
+.historial .fecha{flex-shrink:0;width:84px;color:var(--texto-tenue);font-size:11px;font-weight:600;padding-top:1px}
+.historial .desc{line-height:1.6;font-size:12px;color:var(--texto-suave)}
+.historial .desc b{color:var(--texto);font-weight:600}
+.historial .dot{width:7px;height:7px;border-radius:50%;background:var(--texto-tenue);flex-shrink:0;margin-top:5px}
+.historial .item.alerta .dot{background:var(--rojo)}
+
+footer{text-align:center;font-size:10.5px;color:var(--texto-tenue);padding:22px 20px 34px;border-top:1px solid var(--borde);margin-top:8px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <svg viewBox="0 0 200 200" fill="none" stroke="#a4271c" stroke-width="8">
+        <path d="M60,30 C40,45 42,75 65,90 C48,98 40,120 48,145 C55,168 85,175 110,160 L150,40" stroke-linecap="round" stroke-linejoin="round"/>
+        <ellipse cx="75" cy="32" rx="28" ry="9"/>
+      </svg>
+      <span class="glitch">VESSALIN</span>
+    </div>
+    <div class="sesion">Acceso mediante credencial física<br><b>Sesión de solo lectura</b></div>
+  </div>
+</header>
+
+<nav>
+  <div class="nav-inner">
+    <button class="tab active" onclick="ir('inicio',this)">Inicio</button>
+    <button class="tab" onclick="ir('perfil',this)">Perfil</button>
+    <button class="tab" onclick="ir('notas',this)">Notas de campo</button>
+    <button class="tab" onclick="ir('personal',this)">Solicitudes</button>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <!-- ══ INICIO ══ -->
+  <div class="vista active" id="v-inicio">
+    <div class="aviso">
+      <svg class="icono" viewBox="0 0 24 24" fill="none" stroke="#92400e" stroke-width="2"><path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div>
+        <div class="t glitch-fast">Aviso de integridad</div>
+        Los datos de titularidad asociados a esta cuenta han sido
+        <b>modificados con posterioridad a su emisión original</b>.
+        El nombre del titular ha sido eliminado del registro visible.
+        Consulte la pestaña Perfil para ver el historial de cambios.
+      </div>
+    </div>
+
+    <div class="card">
+      <h1>Bienvenido al portal corporativo</h1>
+      <div class="desc">Consulta de expedientes y personal · Acceso restringido</div>
+      <div class="campos-grid">
+        <div class="campo"><span class="k">Expediente activo</span><span class="v">26-1310</span></div>
+        <div class="campo"><span class="k">Acceso concedido por</span><span class="v">Credencial física</span></div>
+        <div class="campo"><span class="k">Fase operativa</span><span class="v">Fase I Concluida</span></div>
+        <div class="campo"><span class="k">Régimen</span><span class="v">Auditoría / Solo lectura</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h1>Ficha de registro · Espécimen 026</h1>
+      <div class="desc">Datos de identificación y métricas del periodo de observación</div>
+      <div class="campos-grid">
+        <div class="campo"><span class="k">Denominación local</span><span class="v">German Sanchez Muñoz-Cruzado</span></div>
+        <div class="campo"><span class="k">Emplazamiento</span><span class="v">Cádiz, España, Europa.</span></div>
+        <div class="campo"><span class="k">Coordenadas</span><span class="v">36.52 N / -6.29 W</span></div>
+        <div class="campo"><span class="k">Ciclos completados</span><span class="v">025</span></div>
+        <div class="campo"><span class="k">Rotaciones registradas</span><span class="v">9.125</span></div>
+        <div class="campo"><span class="k">Entradas de registro</span><span class="v">41.200</span></div>
+        <div class="campo"><span class="k">Sustituciones de obs.</span><span class="v">000</span></div>
+        <div class="campo"><span class="k">Estado de Fase I</span><span class="v"><span class="pill verde">COMPLETADO</span></span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h1>Telemetría Biométrica</h1>
+      <div class="desc">Calibración estructural y vital del espécimen · <span class="glitch" style="color:var(--rojo)">Transmisión en directo</span></div>
+      <div class="campos-grid">
+        <div class="campo"><span class="k">Perímetro Hombros</span><span class="v mono"><span id="m-hombro">124.00</span> cm</span></div>
+        <div class="campo"><span class="k">Perímetro Torácico</span><span class="v mono"><span id="m-pecho">111.00</span> cm</span></div>
+        <div class="campo"><span class="k">Perímetro Glúteo</span><span class="v mono"><span id="m-culo">113.00</span> cm</span></div>
+        <div class="campo"><span class="k">Eje Pélvico</span><span class="v mono"><span id="m-cadera">106.00</span> cm</span></div>
+        <div class="campo"><span class="k">Eje Abdominal</span><span class="v mono"><span id="m-cintura">99.00</span> cm</span></div>
+        <div class="campo"><span class="k">Extremidad Inferior</span><span class="v mono"><span id="m-pierna">60.00</span> cm</span></div>
+        <div class="campo"><span class="k">Extremidad Superior</span><span class="v mono"><span id="m-brazo">40.00</span> cm</span></div>
+        <div class="campo"><span class="k">Frecuencia Cardíaca</span><span class="v mono" style="color:var(--rojo-osc)"><span id="m-pulso">65</span> bpm</span></div>
+        <div class="campo"><span class="k">Ciclo Respiratorio</span><span class="v mono"><span id="m-resp">14</span> rpm</span></div>
+        <div class="campo"><span class="k">Temperatura Central</span><span class="v mono"><span id="m-temp">36.6</span> ºC</span></div>
+        <div class="campo"><span class="k">Saturación O2 (SpO2)</span><span class="v mono"><span id="m-spo2">99</span> %</span></div>
+        <div class="campo"><span class="k">Estado del enlace</span><span class="v"><span class="pill verde glitch-fast">ESTABLE</span></span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PERFIL ══ -->
+  <div class="vista" id="v-perfil">
+    <div class="card">
+      <div class="perfil-cab">
+        <div class="avatar glitch">?</div>
+        <div>
+          <div class="nombre glitch">— nombre eliminado —</div>
+          <div class="rol">Observador · Departamento: Observación Exterior</div>
+        </div>
+      </div>
+      <div class="campos-grid">
+        <div class="campo"><span class="k">Designación</span><span class="v glitch">████-█</span></div>
+        <div class="campo"><span class="k">Titular</span><span class="v tachado glitch-fast">████████</span></div>
+        <div class="campo"><span class="k">Fecha de alta</span><span class="v">Ciclo 000</span></div>
+        <div class="campo"><span class="k">Fecha de baja</span><span class="v">13.10.2026</span></div>
+        <div class="campo"><span class="k">Departamento</span><span class="v">Observación Exterior · Sección 4</span></div>
+        <div class="campo"><span class="k">Expediente asignado</span><span class="v">26-1310</span></div>
+        <div class="campo"><span class="k">Sustituciones registradas</span><span class="v">000</span></div>
+        <div class="campo"><span class="k">Estado de la cuenta</span><span class="v"><span class="pill">INACTIVA</span></span></div>
+      </div>
+    </div>
+
+    <!-- Historial movido aquí dentro de Perfil -->
+    <div class="card" style="margin-top: 16px;">
+      <h1>Historial de cambios de la cuenta</h1>
+      <div class="historial">
+        <div class="item"><div class="dot"></div><div class="fecha">Ciclo 000</div>
+          <div class="desc">Alta de cuenta. Titular asignado: <b class="glitch">████████</b>. Designación emitida: <b class="glitch">████-█</b>.</div></div>
+        <div class="item alerta"><div class="dot"></div><div class="fecha">Hace 12 días</div>
+          <div class="desc">Nombre de titular <b>eliminado</b> del registro visible por el propio usuario.</div></div>
+        <div class="item alerta"><div class="dot"></div><div class="fecha">Hace 9 días</div>
+          <div class="desc">Solicitud de <b>migración de datos personales</b> a ficha externa. Origen: <b class="glitch">████-█</b>.</div></div>
+        <div class="item alerta"><div class="dot"></div><div class="fecha">Hace 9 días</div>
+          <div class="desc">Migración completada. Contenido trasladado: notas de campo, notas personales, registro fotográfico. Ficha de destino: <b>no consta en este sistema</b>.</div></div>
+        <div class="item"><div class="dot"></div><div class="fecha">Hace 3 días</div>
+          <div class="desc">Cuenta marcada como <b>inactiva</b>. Sin baja formal tramitada.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ NOTAS DE CAMPO & FICHAS DE DESARROLLO ══ -->
+  <div class="vista" id="v-notas">
+    
+    <div class="rama" id="ramaCampo">
+      <button class="rama-cab" onclick="toggleRama('ramaCampo')">
+        <div><div class="rama-tit">Notas de campo · Expediente 26-1310</div><div class="rama-sub">Registro técnico y diario del periodo de observación</div></div>
+        <div style="display:flex;align-items:center"><span class="rama-count">5</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </button>
+      <div class="rama-body"><div class="rama-body-inner">
+
+        <div class="sub"><button class="sub-cab" onclick="toggleSub(this)"><span class="h">Año Local 2004</span><svg class="mini-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <div class="sub-body"><div class="sub-body-inner">
+            Ingesta de organismos ossari recogidos directamente del sustrato. Tres unidades. La tercera con evidente intención. No responde a carencia nutricional: el aporte del núcleo familiar es suficiente y variado. No hay rechazo posterior. No hay aversión. Repite.
+          </div></div>
+        </div>
+
+        <div class="sub"><button class="sub-cab" onclick="toggleSub(this)"><span class="h">Ciclo 011</span><svg class="mini-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <div class="sub-body"><div class="sub-body-inner">
+            Tercer dispositivo destruido durante actividad competitiva. El daño se produce siempre sobre material propio, nunca sobre material ajeno ni sobre los individuos presentes. La activación no se registra ante la derrota. Se registra ante el rendimiento deficiente del resto de participantes. Respuesta de tipo sennar ante el fallo ajeno. No consta equivalente en la población local. Se ha quedado mirando la pantalla rota un rato largo. Lo que le molestaba ya no era el juego.
+          </div></div>
+        </div>
+
+        <div class="sub"><button class="sub-cab" onclick="toggleSub(this)"><span class="h">Año Local 2018</span><svg class="mini-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <div class="sub-body"><div class="sub-body-inner">
+            Desplazamiento a emplazamiento interior por incorporación a centro de instrucción superior. Ochocientos kilómetros hasta la masa de agua más próxima. Oscilación térmica del destino: 21.4°. El desplazamiento no produjo evren. Retorna en cada intervalo disponible y la frecuencia del retorno no disminuye con el tiempo de permanencia. Catorce desplazamientos míos este año. Todos justificados como seguimiento.
+          </div></div>
+        </div>
+
+        <div class="sub"><button class="sub-cab" onclick="toggleSub(this)"><span class="h">Ciclo 019</span><svg class="mini-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <div class="sub-body"><div class="sub-body-inner">
+            Desplazamiento a emplazamiento de extracción salina. Muestra recogida. Nivel de nossa elevado: 410 sobre la media local. Rechaza el aporte externo y produce el suyo. Ha vuelto a mirar al cielo durante todo el trayecto. Sigo sin registrar la causa. Recogí dos muestras. Remití una.
+          </div></div>
+        </div>
+
+        <div class="sub"><button class="sub-cab" onclick="toggleSub(this)"><span class="h">Año Local 2023</span><svg class="mini-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <div class="sub-body"><div class="sub-body-inner">
+            Incorporación a estructura productiva local sin evasi documentada. Adaptación completa desde la primera medición. Rinde en tres horas lo que aquí se espera de una jornada, y le han enseñado a disculparse por las horas que faltan. Esto no es una anotación de trabajo. Que conste.
+          </div></div>
+        </div>
+
+      </div></div>
+    </div>
+
+    <div class="rama" id="ramaTutorial">
+      <button class="rama-cab" onclick="toggleRama('ramaTutorial')">
+        <div><div class="rama-tit">Ficha de desarrollo · Espécimen 026</div><div class="rama-sub">Análisis secuencial de ciclos operativos y desviaciones cognitivas</div></div>
+        <div style="display:flex;align-items:center"><span class="rama-count">25</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </button>
+      <div class="rama-body"><div class="rama-body-inner">
+
+        <div class="sub"><button class="sub-cab" onclick="toggleSub(this)"><span class="h">Ciclo 001</span><svg class="mini-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <div class="sub-body"><div class="sub-body-inner">El sujeto no procesa las señales acústicas de sus progenitores cuando manipula objetos, pero registra y analiza el zumbido eléctrico de la luminaria del techo. Su unidad familiar asume sordera. Pruebas auditivas negativas. Simplemente elige qué frecuencias aislar.</div></div>
+        </div>
+
+        <div class="sub"><button class="sub-cab" onclick="toggleSub(this)"><span class="h">Ciclo 002</span><svg class="mini-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <div class="sub-body"><div class="sub-body-inner">Desecha violentamente las capas protectoras locales (ropa) si presentan fricción en la nuca o texturas sintéticas. Sus sensores epidérmicos se saturan. Se le consiente el uso de tejidos lisos tras episodios de rechazo físico severo.</div></div>
+        </div>
+
+        <div class="sub"><button class="sub-cab" onclick="toggleSub(this)"><span class="h">Ciclo 003</span><svg class="mini-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <div class="sub-body"><div class="sub-body-inner">Anomalía en la percepción secuencial. Es biológicamente incapaz de calcular la rotación planetaria. Puede permanecer estático en la misma actividad hasta que la luz diurna desaparece, mostrando sorpresa genuina al notar la oscuridad.</div></div>
+        </div>
+
+        <div class="sub"><button class="sub-cab" onclick="toggleSub(this)"><span class="h">Ciclo 004</span><svg class="mini-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <div class="sub-body"><div class="sub-body-inner">Ingesta de organismos ossari recogidos directamente del sustrato. Tres unidades. La tercera con evidente intención. No responde a carencia nutricional. No hay rechazo posterior ni aversión. Repite.</div></div>
+        </div>
+
+        <div class="sub"><button class="sub-cab" onclick="toggleSub(this)"><span class="h">Ciclo 005</span><svg class="mini-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <div class="sub-body"><div class="sub-body-inner">Se le asignan tareas de modificación de materia con sus extremidades superiores (recorte, moldeado, ensamblaje físico). El resultado es catastrófico y desproporcionado a su inteligencia teórica. Sus habilidades motrices finas son nulas. Abandona la tarea si no percibe una estructura lógica.</div></div>
+        </div>
+
+        <div class="sub"><button class="sub-cab" onclick="toggleSub(this)"><span class="h">Ciclo 006</span><svg class="mini-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <div class="sub-body"><div class="sub-body-inner">Registro de descanso alterado. Despertares en secuencias rítmicas de 90 minutos. Su procesador central parece incapaz de entrar en modo reposo al caer la noche; muestra picos de energía injustificados cuando la población local cesa toda función.</div></div>
+        </div>
+
+        <div class="sub"><button class="sub-cab" onclick="toggleSub(this)"><span class="h">Ciclo 007</span><svg class="mini-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <div class="sub-body"><div class="sub-body-inner">No inicia tareas de mantenimiento básico de su hábitat hasta que existe una amenaza inminente de supervisión externa. Funciona exclusivamente mediante picos de presión química en su sistema.</div></div>
+        </div>
+
+        <div class="sub"><button class="sub-cab" onclick="toggleSub(this)"><span class="h">Ciclo 008</span><svg class="mini-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <div class="sub-body"><div class="sub-body-inner">Anomalía en la recepción de datos sociales. Reacciona con absoluta lógica ante crisis graves del entorno, pero experimenta alteraciones cardíacas severas ante variaciones acústicas mínimas en el tono vocal de sus allegados. Interpreta la ambigüedad como hostilidad.</div></div>
+        </div>
+
+        <div class="sub"><button class="sub-cab" onclick="toggleSub(this)"><span class="h">Ciclo 009</span><svg class="mini-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <div class="sub-body"><div class="sub-body-inner">Inicia una simbiosis primaria con especímenes felinos locales (Tai, Rita). Decodifica sus necesidades y prefiere su interacción a la humana. Los felinos no exigen los agotadores protocolos de comunicación no verbal de su especie.</div></div>
+        </div>
+
+        <div class="sub"><button class="sub-cab" onclick="toggleSub(this)"><span class="h">Ciclo 010</span><svg class="mini-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <div class="sub-body"><div class="sub-body-inner">Ante su nula capacidad para construir con las manos, crea realidades digitales. Controla simulaciones topográficas de bloques de materia, alterando variables internas (mods de gestión de aldeas). Su nivel de microgestión arquitectónica raya en la obsesión.</div></div>
+        </div>
+
+        <div class="sub"><button class="sub-cab" onclick="toggleSub(this)"><span class="h">Ciclo 011</span><svg class="mini-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <div class="sub-body"><div class="sub-body-inner">Tercer dispositivo destruido durante actividad competitiva. La activación no se registra ante la derrota. Se registra ante el rendimiento deficiente del resto de participantes. Respuesta de tipo sennar ante el fallo ajeno. Lo que le molestaba ya no era el juego.</div></div>
+        </div>
+
+        <div class="sub"><button class="sub-cab" onclick="toggleSub(this)"><span class="h">Ciclo 012</span><svg class="mini-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <div class="sub-body"><div class="sub-body-inner">Aísla una porción de agua dulce (60 litros). En lugar de observar a los organismos acuáticos de su interior, desarrolla una fijación por la química invisible: balance de nitritos, pH, filtración por carbón activo. Intenta controlar el ecosistema a nivel molecular.</div></div>
+        </div>
+
+        <div class="sub"><button class="sub-cab" onclick="toggleSub(this)"><span class="h">Ciclo 013</span><svg class="mini-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <div class="sub-body"><div class="sub-body-inner">Aplica química térmica a la ingesta (repostería). No tolera el método de estimación local ("a ojo"). Pesa los componentes en fracciones de gramo para producir moldes exactos de una sola ración. Si la proporción falla, el proceso biológico se anula.</div></div>
+        </div>
+
+        <div class="sub"><button class="sub-cab" onclick="toggleSub(this)"><span class="h">Ciclo 014</span><svg class="mini-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <div class="sub-body"><div class="sub-body-inner">Tras interactuar con agrupaciones sociales densas, entra en letargo forzoso. Se retira a espacios sin estímulos para recalibrar su sistema. Sus pares creen que está fatigado; en realidad, está purgando la sobrecarga sensorial.</div></div>
+        </div>
+
+        <div class="sub"><button class="sub-cab" onclick="toggleSub(this)"><span class="h">Ciclo 015</span><svg class="mini-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <div class="sub-body"><div class="sub-body-inner">Adquiere un dispositivo mecánico de entrelazado de fibras (Alfa 674) para no tener que coser a mano. Pasa nueve rotaciones ajustando matemáticamente la tensión del hilo sin llegar a fabricar nada. La calibración le resulta más estimulante que el objetivo final.</div></div>
+        </div>
+
+        <div class="sub"><button class="sub-cab" onclick="toggleSub(this)"><span class="h">Ciclo 016</span><svg class="mini-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <div class="sub-body"><div class="sub-body-inner">Rechaza el lenguaje ambiguo humano y migra a protocolos lógicos (C++). Traslada matrices de renderizado tridimensional entre el entorno OSG y VSG. Las máquinas, a diferencia de la población local, devuelven exactamente lo que se les pide.</div></div>
+        </div>
+
+        <div class="sub"><button class="sub-cab" onclick="toggleSub(this)"><span class="h">Ciclo 017</span><svg class="mini-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <div class="sub-body"><div class="sub-body-inner">Su aversión a la creación manual le lleva a delegar la fabricación en polímeros inyectados. Analiza parámetros (PrusaSlicer, perímetros, rigidez estructural) de forma obsesiva. Prefiere invertir catorce horas programando la máquina que ensamblar dos piezas a mano.</div></div>
+        </div>
+
+        <div class="sub"><button class="sub-cab" onclick="toggleSub(this)"><span class="h">Ciclo 018</span><svg class="mini-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <div class="sub-body"><div class="sub-body-inner">Desplazamiento a emplazamiento interior por incorporación a centro de instrucción superior (Ingeniería). Ochocientos kilómetros hasta la masa de agua más próxima. El desplazamiento no produjo evren. Retorna en cada intervalo disponible.</div></div>
+        </div>
+
+        <div class="sub"><button class="sub-cab" onclick="toggleSub(this)"><span class="h">Ciclo 019</span><svg class="mini-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <div class="sub-body"><div class="sub-body-inner">Desplazamiento a emplazamiento de extracción salina. Nivel de nossa elevado: 410 sobre la media local. Rechaza el aporte externo y produce el suyo. Ha vuelto a mirar al cielo durante todo el trayecto. Sigo sin registrar la causa.</div></div>
+        </div>
+
+        <div class="sub"><button class="sub-cab" onclick="toggleSub(this)"><span class="h">Ciclo 020</span><svg class="mini-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <div class="sub-body"><div class="sub-body-inner">Terraformación agraria a microescala en un balcón. Despliega botánica (tomates, calabacines). No obedece a supervivencia, sino a regulación química cerebral. La poda metódica de los tallos actúa como estabilizador interno.</div></div>
+        </div>
+
+        <div class="sub"><button class="sub-cab" onclick="toggleSub(this)"><span class="h">Ciclo 021</span><svg class="mini-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <div class="sub-body"><div class="sub-body-inner">Rituales físicos incomprensibles sobre sus filamentos craneales. Aplica emulsiones, amasa la estructura repetitivamente y restringe su movimiento con tela. Si el peso y la textura resultantes no son los proyectados, su ciclo se desestabiliza.</div></div>
+        </div>
+
+        <div class="sub"><button class="sub-cab" onclick="toggleSub(this)"><span class="h">Ciclo 022</span><svg class="mini-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <div class="sub-body"><div class="sub-body-inner">Sobrecarga intencionada del canal lingüístico. Obliga a su red neuronal a operar en idiomas extranjeros (inglés, portugués). Su procesador requiere un volumen constante de fricción de datos para no entrar en bucles de inactividad destructiva.</div></div>
+        </div>
+
+        <div class="sub"><button class="sub-cab" onclick="toggleSub(this)"><span class="h">Ciclo 023</span><svg class="mini-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <div class="sub-body"><div class="sub-body-inner">Incorporación a estructura productiva local sin evasi documentada. Rinde en tres horas lo que aquí se espera de una jornada mediante estados de trance operativo donde ignora el dolor físico o el hambre. Le han enseñado a disculparse por las horas que faltan.</div></div>
+        </div>
+
+        <div class="sub"><button class="sub-cab" onclick="toggleSub(this)"><span class="h">Ciclo 024</span><svg class="mini-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <div class="sub-body"><div class="sub-body-inner">Requiere andamiaje visual estricto para su mantenimiento anatómico (5 rotaciones semanales: glúteos, core, tren superior). Sin un cuadrante visual que dicte las repeticiones, su capacidad de ejecutar secuencias colapsa y el protocolo se detiene.</div></div>
+        </div>
+
+        <div class="sub" style="border-bottom:none"><button class="sub-cab" onclick="toggleSub(this)"><span class="h">Ciclo 025 (Cierre)</span><svg class="mini-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <div class="sub-body"><div class="sub-body-inner">Realiza pruebas académicas de alto nivel (matemáticas, física) exigiendo hablar "con propiedad y técnicamente" ante el terror a la ambigüedad verbal. Tras una expedición marítima (Santorini, Éfeso) fuertemente parametrizada, la fase concluye. Su estabilización actual se debe, en gran medida, a la exitosa delegación de su carga de procesamiento diario en su unidad biológica de emparejamiento. Rendimiento: Excepcional.</div></div>
+        </div>
+
+      </div></div>
+    </div>
+  </div>
+
+  <!-- ══ SOLICITUDES / PERSONAL ══ -->
+  <div class="vista" id="v-personal">
+    <div class="rama" id="ramaSolic">
+      <button class="rama-cab" onclick="toggleRama('ramaSolic')">
+        <div><div class="rama-tit">Solicitudes cursadas por el observador</div><div class="rama-sub">Expediente 26-1310 · Registro interno</div></div>
+        <div style="display:flex;align-items:center"><span class="rama-count">8</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </button>
+      <div class="rama-body"><div class="rama-body-inner">
+        <div class="sub" style="border-bottom:none">
+          <div class="sub-body open" style="max-height:800px"><div class="sub-body-inner" style="padding-top:14px">
+            <b style="color:var(--texto)">Ciclo 004</b> · Suspensión del ensayo de exposición solar. <b>DENEGADA.</b> El ensayo forma parte del protocolo.<br><br>
+            <b style="color:var(--texto)">Ciclo 006</b> · Corrección del patrón de reposo del sujeto. <b>DENEGADA.</b> Intervención visible.<br><br>
+            <b style="color:var(--texto)">Ciclo 011</b> · Reposición de material del sujeto. Coste imputable al solicitante. <b>DENEGADA.</b> Sin relevancia.<br><br>
+            <b style="color:var(--texto)">Ciclo 014</b> · Contacto directo con el sujeto. <b>DENEGADA.</b><br><br>
+            <b style="color:var(--texto)">Ciclo 019</b> · Contacto directo con el sujeto. <b>DENEGADA.</b> Se advierte al observador.<br><br>
+            <b style="color:var(--texto)">Ciclo 023</b> · Contacto directo con el sujeto. <b>DENEGADA.</b> Segunda advertencia.<br><br>
+            <b style="color:var(--texto)">Ciclo 025</b> · Contacto directo con el sujeto. <b>DENEGADA.</b><br><br>
+            <b style="color:var(--texto)">Ciclo 025</b> · Relevo de la observación. <b>DENEGADA.</b> Retirada posteriormente por el propio solicitante.<br><br>
+            <b style="color:var(--rojo)">Solicitudes de contacto directo: 004 cursadas · 000 concedidas</b>
+          </div></div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  VESSALIN · PORTAL CORPORATIVO · ACCESO RESTRINGIDO<br>
+  Esta página no es propiedad de la Oficina de Conformidad
+</footer>
+
+<script>
+function ir(id, btn){
+  document.querySelectorAll('.vista').forEach(v=>v.classList.remove('active'));
+  document.getElementById('v-'+id).classList.add('active');
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function toggleRama(id){
+  const el = document.getElementById(id);
+  const abrir = !el.classList.contains('open');
+  el.parentElement.querySelectorAll('.rama').forEach(r=>{
+    r.classList.remove('open');
+    r.querySelector('.rama-body').style.maxHeight = null;
+  });
+  if(abrir){
+    el.classList.add('open');
+    const body = el.querySelector('.rama-body');
+    body.style.maxHeight = body.scrollHeight + 'px';
+  }
+}
+function toggleSub(btn){
+  const sub = btn.parentElement;
+  const body = sub.querySelector('.sub-body');
+  const abrir = !sub.classList.contains('open');
+  sub.classList.toggle('open', abrir);
+  body.style.maxHeight = abrir ? body.scrollHeight + 'px' : null;
+  setTimeout(()=>{
+    const ramaBody = sub.closest('.rama-body');
+    if(ramaBody) ramaBody.style.maxHeight = ramaBody.scrollHeight + 'px';
+  }, 320);
+}
+
+// Script para la simulación de telemetría biométrica
+setInterval(() => {
+  // Fluctuación de perímetros estructurales
+  const idsEst = ['m-hombro', 'm-pecho', 'm-culo', 'm-cadera', 'm-cintura', 'm-pierna', 'm-brazo'];
+  const basesEst = [124, 111, 113, 106, 99, 60, 40];
+  
+  idsEst.forEach((id, i) => {
+    let el = document.getElementById(id);
+    if(el) {
+      el.innerText = (basesEst[i] + (Math.random() * 0.4 - 0.2)).toFixed(2);
+    }
+  });
+
+  // Fluctuación de constantes vitales
+  let pulsoEl = document.getElementById('m-pulso');
+  if(pulsoEl) {
+    pulsoEl.innerText = 64 + Math.floor(Math.random() * 4);
+  }
+
+  let respEl = document.getElementById('m-resp');
+  if(respEl) {
+    respEl.innerText = 14 + Math.floor(Math.random() * 3);
+  }
+
+  let tempEl = document.getElementById('m-temp');
+  if(tempEl) {
+    tempEl.innerText = (36.5 + Math.random() * 0.3).toFixed(1);
+  }
+
+  let spo2El = document.getElementById('m-spo2');
+  if(spo2El) {
+    spo2El.innerText = 98 + Math.floor(Math.random() * 2);
+  }
+}, 1200);
+</script>
+</body>
+</html>
